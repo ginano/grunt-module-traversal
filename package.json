@@ -1,0 +1,44 @@
+{
+  "name": "grunt-module-traversal",
+  "description": "It's a tool for traverse all the dependencies of js modules, and write the imported css or js files to the html files!",
+  "version": "0.0.1",
+  "homepage": "https://github.com/ginano/grunt-module-traversal",
+  "author": {
+    "name": "ginano",
+    "email": "www@ginano.net",
+    "url": "http://www.ginano.net"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ginano/grunt-module-traversal.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ginano/grunt-module-traversal/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/ginano/grunt-module-traversal/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin",
+    "html",
+    "min",
+    "module",
+    "amd",
+    "traversal"
+  ]
+}
