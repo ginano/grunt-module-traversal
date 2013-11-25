@@ -33,3 +33,7 @@ grunt.initConfig({
 })
 ```
 
+```change logs
+
+2013-11-25 add some comments in the sourcecode, and add the function of setting shared rate for common modules, which could compress these files to one common file.
+

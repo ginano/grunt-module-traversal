@@ -65,10 +65,12 @@ function extend(isDeep, originObj, newObj, isOverride,selectedProperty){
     if(isOverride===undefined){
         isOverride=true;
     }
+    //如果限定了属性列表
     if(selectedProperty && (p=selectedProperty.length)){
         while(p--){
             item=selectedProperty[p];
             if(isDeep || hasOwn.call(newObj,item)){
+            	//如果需要重载才复制，并做深度复制
                 (isOverride||originObj[item]===undefined) && (originObj[item]= cloneObject(newObj[item]));
             }
         }
@@ -96,6 +98,7 @@ function cloneObject(o,isCloneFunction,isClonePrototype){
 	    	con,
 	    	prop;
 	    type = typeof obj;
+	    //基本类型直接返回
 	    if(obj===undefined||obj===null){
 	    	return objClone=obj;
 	    }
@@ -103,10 +106,10 @@ function cloneObject(o,isCloneFunction,isClonePrototype){
 	    	return objClone = obj;
 	    }
 	    con=obj.constructor;
-	    if (con == Object){
+	    if (con == Object){	//对象采用new的形式复制
 	        objClone = new con(); 
-	    }else if(con==Function){
-	    	if(isCopyFunction){
+	    }else if(con==Function){	//function采用new Function一样的形式，但是为了保证作用域采用了eval
+	    	if(isCopyFunction){	
 	    		objClone=eval('['+obj.toString()+']')[0];
 	    	}else{
 	    		return objClone=obj;
@@ -114,6 +117,9 @@ function cloneObject(o,isCloneFunction,isClonePrototype){
 	    }else{
 	        objClone = new con(obj.valueOf()); 
 	    }
+	    /**
+	     * 再把属性值附加上去
+	     */
 	    for(var key in obj){
 	        if ( objClone[key] != obj[key] ){ 
 	            if ( typeof(obj[key]) == 'object' ){ 
@@ -186,6 +192,7 @@ function getContent(url, callback, errorcall) {
 	var _content = '';
 	//from net
 	if (isUrl(url)) {
+		//下载内容，监听数据成功的事件
 		Http.get(url, function(res) {
 			res.on('data', function(data) {
 				_content += data;
@@ -205,7 +212,7 @@ function getContent(url, callback, errorcall) {
 			}
 			log("Got error from [" + url + "]:\n" + e.message, 'error');
 		});
-	} else {
+	} else {// read from local disk
 		setTimeout(function() {
 			try {
 				//should clear the query string
@@ -225,6 +232,41 @@ function getContent(url, callback, errorcall) {
 			}
 		}, 0);
 	}
+}
+/**
+ * 获取文件中的css和js外联文件
+ * @param  {[type]} filepath [description]
+ * @param  {[Function]} callback [description]
+ * @return {[type]}          [description]
+ */
+function getStyleAndScriptFiles(filepath, callback){
+	getContent(filepath, function(content){
+		var fileList={
+			cssList:[],
+			jsList:[]
+		};
+        var cssList = content.match(/<link\s+(?:[^>]+\s+)*type=["']\s*text\/css\s*["'](?:\s+[^>]+)*[\s+\/]?>|<style[^>]*>(?:[\S\s]*?)<\/style\s*>/ig);
+        var jsList = content.match(/<script[^>]*>(?:[\s\S]*?)<\/script\s*>/ig);
+        if(cssList && cssList.length){
+          cssList.forEach(function(css){
+           var href = css.match(/href=(?:"|')?([^"' >]+)(?:"|')?/i);
+           if(href && href[1]){
+              fileList.cssList.push([href[1]]);
+           }
+          });
+        }
+        if(jsList && jsList.length){
+          jsList.forEach(function(js){
+           var href = js.match(/^<script[^>]+src=(?:"|')\s*(\S+)\s*(?:"|')/i);
+           if(href && href[1]){
+              fileList.jsList.push([href[1]]);
+           }
+          });
+        }
+		if(isFunction(callback)){
+		 callback(fileList);
+		}
+	});
 }
 /**
  * get the absoulte path of file relativePath, which relatived to targetFilePath
@@ -296,5 +338,6 @@ module.exports= {
 	extend:extend,
 	hasOwn:hasOwn,
 	cloneObject:cloneObject,
-	checkPathExtensionName: checkPathExtensionName
+	checkPathExtensionName: checkPathExtensionName,
+	getStyleAndScriptFiles: getStyleAndScriptFiles
 };

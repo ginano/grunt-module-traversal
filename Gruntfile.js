@@ -15,10 +15,7 @@ module.exports = function(grunt) {
     // Configuration to be run (and then tested).
     moduleTraversal: {
       test: {
-        options:{
-          
-        },
-        src: ['../../../dolphinjs/test/*.html']
+        src: ['../../../module/src/*.html']
       }
     }
   });

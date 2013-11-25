@@ -1,7 +1,7 @@
 {
   "name": "grunt-module-traversal",
   "description": "It's a tool for traverse all the dependencies of js modules, and write the imported css or js files to the html files!",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/ginano/grunt-module-traversal",
   "author": {
     "name": "ginano",
